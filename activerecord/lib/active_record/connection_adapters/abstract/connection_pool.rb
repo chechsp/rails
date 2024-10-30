@@ -628,7 +628,7 @@ module ActiveRecord
       # or a thread dies unexpectedly.
       def reap
         stale_connections = synchronize do
-          @connections.select do |conn|
+          (@connections || []).select do |conn|
             conn.in_use? && !conn.owner.alive?
           end.each do |conn|
             conn.steal!
